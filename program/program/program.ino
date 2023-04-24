@@ -1,6 +1,7 @@
 int ledPin = 5;
 int buttonApin = 9;
-bool zustand1 = false;
+bool device1 = false;
+bool device2 = false;
 char Incoming_value = 0;
 
 
@@ -15,21 +16,21 @@ void setup()
 void master()
 {
   Serial.println("Master runs...");
-  zustand1 = false;
-  bool device2 = false;
+  device1 = true;
+  device2 = false;
   while(true)
   {
     if (digitalRead(buttonApin) == LOW)
     {
       Serial.println("Button 1 pressed...");
-      zustand1 =! zustand1;
+      device1 =! device1;
       delay(200);
       Serial.print("Device1: ");
-      Serial.println(zustand1);
+      Serial.println(device1);
     }
     
 
-    if(zustand1 == true)
+    if(device1 == true)
     {
       digitalWrite(ledPin, HIGH);
     }else{
@@ -40,15 +41,15 @@ void master()
       Incoming_value = Serial.read();
       if(Incoming_value == '1')
       {
-        zustand1 = true;
+        device1 = true;
         Serial.print("Device1: ");
-        Serial.println(zustand1);
+        Serial.println(device1);
 
       }else if(Incoming_value == '0')
       {
-        zustand1 = false;
+        device1 = false;
         Serial.print("Device1: ");
-        Serial.println(zustand1);
+        Serial.println(device1);
 
       }else if(Incoming_value == '3')
       {
@@ -76,7 +77,5 @@ void loop()
     }
   }
     
-
-
 
 }
