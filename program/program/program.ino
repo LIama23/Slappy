@@ -5,6 +5,7 @@ int buttonApin2 = 10;
 bool device1 = false;
 bool device2 = false;
 char Incoming_value = 0;
+int status = 1;
 
 
 void setup() 
@@ -17,12 +18,13 @@ void setup()
   Serial.println("Hello World");
 }
 
-void master()
+int master()
 {
   Serial.println("Master runs...");
   device1 = true;
   device2 = false;
-  while(true)
+  int counter = 0;
+  while(counter < 5)
   {
     if (digitalRead(buttonApin) == LOW)
     {
@@ -34,6 +36,8 @@ void master()
       Serial.println(device1);
       Serial.print("Device2: ");
       Serial.println(device2);
+
+      counter++;
     }
     if (digitalRead(buttonApin2) == LOW)
     {
@@ -45,6 +49,8 @@ void master()
       Serial.println(device1);
       Serial.print("Device2: ");
       Serial.println(device2);
+
+      counter++;
     }
     
 
@@ -92,26 +98,41 @@ void master()
         Serial.println(device2);
       }
     }
-    for(int counter = 0; counter < 3; counter++)
-    {
-      
-
-    }
   }
+  return 3;
 }
 
 void loop() 
 {
-
-  if(Serial.available() > 0)
+  
+  switch(status)
   {
-    Incoming_value = Serial.read();
-    Serial.println(Incoming_value);
-    if(Incoming_value == '3')
-    {
-      master();
-    }
-  }
-    
+    case 1: //Begrüssung
+    Serial.println("Willkommen im Slappytrainer 1.0");
+    Serial.println("Bitte Übungsprogramm auswählen: ");
+    delay(2000);
+    status = 2;
+    break;
 
+    case 2: //Mainscreen
+    if(Serial.available() > 0)
+    {
+      Incoming_value = Serial.read();
+      Serial.println(Incoming_value);
+      if(Incoming_value == '3')
+      {
+        status = master();
+      }else if(Incoming_value == '6')
+      {
+        status = 1;
+      }
+    }
+    break;
+
+    case 3: //Übung beendet
+    Serial.println("Übung 3 beendet. :)");
+    status = 1;
+    break;
+  }
+   
 }
