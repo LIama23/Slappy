@@ -20,7 +20,7 @@ void loop()
     Serial.println("Pressed...");
 
     zustand1 =! zustand1;
-    delay(2000);
+    delay(200);
   }
   
   Serial.println(zustand1);
